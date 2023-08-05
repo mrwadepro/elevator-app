@@ -1,6 +1,7 @@
 import { useToast } from '@apideck/components'
 import { ChatCompletionRequestMessage } from 'openai'
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
+import { getHeapCodeStatistics } from 'v8'
 import { sendMessage } from './sendMessage'
 
 interface ContextProps {
@@ -20,11 +21,12 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
     const initializeChat = () => {
       const systemMessage: ChatCompletionRequestMessage = {
         role: 'system',
-        content: 'You are ChatGPT, a large language model trained by OpenAI.'
+        content:
+          'You are an elevator mechanics assistant that will help locate information from the ASME ASME A17.1-2016/CSA B44-16. You should ask me questions to clarify if you dont understand something. Your response should include supporting information from ASME A17.1-2016 and its respective getHeapCodeStatistics. If possible cross reference ASME A17.2-2016/CSA B44-16 so that I can understand how to test it'
       }
       const welcomeMessage: ChatCompletionRequestMessage = {
         role: 'assistant',
-        content: 'Hi, How can I help you today?'
+        content: 'Today having its ups and downs?'
       }
       setMessages([systemMessage, welcomeMessage])
     }
