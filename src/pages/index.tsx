@@ -8,9 +8,13 @@ const IndexPage: NextPage = () => {
   return (
     <MessagesProvider>
       <Layout>
-        <MessagesList />
-        <div className="fixed bottom-0 right-0 left-0">
-          <MessageForm />
+        <div className="flex flex-col h-screen justify-between">
+          <div className="mb-auto">
+            <MessagesList />
+          </div>
+          <div className="relative">
+            <MessageForm />
+          </div>
         </div>
       </Layout>
     </MessagesProvider>
