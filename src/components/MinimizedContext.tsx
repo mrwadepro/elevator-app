@@ -1,31 +1,27 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react'
 
 interface MinimizedContextType {
-  isMinimized: boolean;
-  toggleMinimized: () => void;
+  isMinimized: boolean
+  toggleMinimized: () => void
 }
 
-const MinimizedContext = createContext<Partial<MinimizedContextType>>({});
+const MinimizedContext = createContext<Partial<MinimizedContextType>>({})
 
 export function MinimizedProvider({ children }: { children: React.ReactNode }) {
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false)
 
   const toggleMinimized = () => {
-    setIsMinimized((prevIsMinimized) => !prevIsMinimized);
-  };
+    setIsMinimized((prevIsMinimized) => !prevIsMinimized)
+  }
 
   const contextValue: MinimizedContextType = {
     isMinimized,
-    toggleMinimized,
-  };
+    toggleMinimized
+  }
 
-  return (
-    <MinimizedContext.Provider value={contextValue}>
-      {children}
-    </MinimizedContext.Provider>
-  );
+  return <MinimizedContext.Provider value={contextValue}>{children}</MinimizedContext.Provider>
 }
 
 export const useMinimized = () => {
-  return useContext(MinimizedContext) as MinimizedContextType;
-};
+  return useContext(MinimizedContext) as MinimizedContextType
+}
