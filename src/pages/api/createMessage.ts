@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function createMessage(req: NextApiRequest, res: NextApiResponse) {
+  const controller = new AbortController()
+
+  const timeoutId = setTimeout(() => controller.abort(), 300000)
   const { messages } = req.body
 
   const BASE_URL = 'https://server-stemuli.ngrok.io'
@@ -13,8 +16,10 @@ export default async function createMessage(req: NextApiRequest, res: NextApiRes
       headers: {
         'Content-Type': 'application/json'
       },
-      body
+      body,
+      signal: controller.signal
     })
+    clearTimeout(timeoutId)
     const data = await response.json()
     res.status(200).json({ data })
   } catch (error) {
