@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-export const maxDuration = 5000 // This function can run for a maximum of 5 seconds
+export const maxDuration = 300000 // This function can run for a maximum of 5 seconds
 
 export default async function createMessage(req: NextApiRequest, res: NextApiResponse) {
   const { messages } = req.body
