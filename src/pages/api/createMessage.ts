@@ -2,21 +2,16 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function createMessage(req: NextApiRequest, res: NextApiResponse) {
   const { messages } = req.body
-  const apiKey = process.env.OPENAI_API_KEY
-  const url = 'https://api.openai.com/v1/chat/completions'
 
-  const body = JSON.stringify({
-    messages,
-    model: 'gpt-3.5-turbo',
-    stream: false
-  })
+  const BASE_URL = process.env.BASE_URL
+
+  const body = JSON.stringify({ message: messages[messages.length - 1] })
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(BASE_URL + '/send-message', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`
+        'Content-Type': 'application/json'
       },
       body
     })
