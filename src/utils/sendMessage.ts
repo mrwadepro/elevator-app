@@ -7,7 +7,8 @@ export const sendMessage = async (messages: ChatCompletionRequestMessage[]) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ messages })
+      body: JSON.stringify({ messages }),
+      timeout: 300000
     })
 
     return await response.json()
