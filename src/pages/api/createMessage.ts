@@ -7,7 +7,7 @@ export default async function createMessage(req: NextApiRequest, res: NextApiRes
   const { messages } = req.body
 
   const BASE_URL = 'https://server-stemuli.ngrok.io'
-
+  console.log()
   const body = JSON.stringify({ message: messages[messages.length - 1] })
 
   try {
