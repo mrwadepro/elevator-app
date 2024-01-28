@@ -44,9 +44,9 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
       // Add the user message to the state so we can see it immediately
       setMessages(newMessages)
 
-      const { data } = await sendMessage(newMessages)
-      console.log(data)
-      const reply = data.content
+      const { body } = await sendMessage(newMessages)
+
+      const reply = { content: body.data[0].content[0].text.value }
 
       // Add the assistant message to the state
       setMessages([...newMessages, reply])

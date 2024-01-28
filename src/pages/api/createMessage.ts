@@ -1,28 +1,66 @@
+import OpenAI from 'openai'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-export const config = {
-  maxDuration: 300
-}
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY // This is the default and can be omitted
+})
 
-export default async function createMessage(req: NextApiRequest, res: NextApiResponse) {
-  const { messages } = req.body
+class CreateMessage {
+  private _threadId: string
 
-  const BASE_URL = 'https://server-stemuli.ngrok.io'
+  constructor() {
+    this._threadId = ''
+    console.log('in the constructor')
+    this.handleRequest = this.handleRequest.bind(this)
+  }
 
-  const body = JSON.stringify({ message: messages[messages.length - 1] })
+  get threadId(): string {
+    return this._threadId
+  }
 
-  try {
-    const response = await fetch(BASE_URL + '/send-message', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body
-    })
+  set threadId(value: string) {
+    this._threadId = value
+  }
 
-    const data = await response.json()
-    res.status(200).json({ data })
-  } catch (error) {
-    res.status(500).json({ error: 'An unknown error occurred.' })
+  async handleRequest(req: NextApiRequest, res: NextApiResponse) {
+    const { messages } = req.body
+
+    // GET LAST MESSAGE
+    const message = messages[messages.length - 1]
+
+    if (!this._threadId) {
+      const newThread = await openai.beta.threads.create()
+      this._threadId = newThread.id
+    }
+
+    try {
+      // const threadMessages = await openai.beta.threads.messages.create(this._threadId, {
+      //   role: 'user',
+      //   content: message
+      // })
+
+      await openai.beta.threads.messages.create(this._threadId, {
+        role: 'user',
+        content: message.content
+      })
+
+      const run = await openai.beta.threads.runs.create(this._threadId, {
+        assistant_id: 'asst_twExmhlOYQRzMJKYC4DsDNJ7'
+      })
+
+      let checkedRun = await openai.beta.threads.runs.retrieve(this._threadId, run.id)
+
+      while (!checkedRun.completed_at && checkedRun.status !== 'failed') {
+        checkedRun = await openai.beta.threads.runs.retrieve(this._threadId, run.id)
+      }
+
+      const threadList = await openai.beta.threads.messages.list(this._threadId)
+
+      res.status(200).json(threadList)
+    } catch (error) {
+      res.status(500).json({ error: 'An unknown error occurred.' })
+    }
   }
 }
+
+export default new CreateMessage().handleRequest
