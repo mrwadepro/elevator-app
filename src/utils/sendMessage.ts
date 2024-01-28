@@ -1,6 +1,6 @@
-import { ChatCompletionRequestMessage } from 'openai'
 
-export const sendMessage = async (messages: ChatCompletionRequestMessage[]) => {
+
+export const sendMessage = async (messages: any[]) => {
   try {
     const response = await fetch('/api/createMessage', {
       method: 'POST',
