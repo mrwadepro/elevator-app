@@ -1,5 +1,6 @@
 import { Button, TextArea } from '@apideck/components'
-import React,{ useState } from 'react'
+import { useState } from 'react'
+
 import { useMessages } from 'utils/useMessages'
 
 const MessageForm = () => {
@@ -27,7 +28,7 @@ const MessageForm = () => {
         </label>
         <TextArea
           name="content"
-          placeholder="Enter your message here..."
+          // placeholder="Enter your message here..."
           rows={3}
           value={content}
           autoFocus
