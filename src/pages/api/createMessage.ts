@@ -10,7 +10,7 @@ class CreateMessage {
 
   constructor() {
     this._threadId = ''
-    console.log('in the constructor')
+
     this.handleRequest = this.handleRequest.bind(this)
   }
 

@@ -1,10 +1,10 @@
 import { useToast } from '@apideck/components'
-import { ChatCompletionRequestMessage } from 'openai'
+
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { sendMessage } from './sendMessage'
 
 interface ContextProps {
-  messages: ChatCompletionRequestMessage[]
+  messages: any[]
   addMessage: (content: string) => Promise<void>
   isLoadingAnswer: boolean
 }
@@ -13,12 +13,12 @@ const ChatsContext = createContext<Partial<ContextProps>>({})
 
 export function MessagesProvider({ children }: { children: ReactNode }) {
   const { addToast } = useToast()
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([])
+  const [messages, setMessages] = useState<any[]>([])
   const [isLoadingAnswer, setIsLoadingAnswer] = useState(false)
 
   useEffect(() => {
     const initializeChat = () => {
-      const welcomeMessage: ChatCompletionRequestMessage = {
+      const welcomeMessage: any = {
         role: 'assistant',
         content: 'Today having its ups and downs?'
       }
@@ -35,7 +35,7 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
   const addMessage = async (content: string) => {
     setIsLoadingAnswer(true)
     try {
-      const newMessage: ChatCompletionRequestMessage = {
+      const newMessage: any = {
         role: 'user',
         content
       }
