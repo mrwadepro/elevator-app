@@ -1,5 +1,4 @@
 import { useToast } from '@apideck/components'
-
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { sendMessage } from './sendMessage'
 
@@ -14,6 +13,7 @@ const ChatsContext = createContext<Partial<ContextProps>>({})
 export function MessagesProvider({ children }: { children: ReactNode }) {
   const { addToast } = useToast()
   const [messages, setMessages] = useState<any[]>([])
+  const [threadId, setThreadId] = useState<string>('')
   const [isLoadingAnswer, setIsLoadingAnswer] = useState(false)
 
   useEffect(() => {
@@ -25,12 +25,10 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
       setMessages([welcomeMessage])
     }
 
-    // When no messages are present, we initialize the chat the system message and the welcome message
-    // We hide the system message from the user in the UI
     if (!messages?.length) {
       initializeChat()
     }
-  }, [messages?.length, setMessages])
+  }, [messages?.length])
 
   const addMessage = async (content: string) => {
     setIsLoadingAnswer(true)
@@ -40,18 +38,21 @@ export function MessagesProvider({ children }: { children: ReactNode }) {
         content
       }
       const newMessages = [...messages, newMessage]
-
-      // Add the user message to the state so we can see it immediately
       setMessages(newMessages)
 
-      const { body } = await sendMessage(newMessages)
+      const response = await sendMessage(newMessages, threadId)
 
-      const reply = { content: body.data[0].content[0].text.value }
+      if (response.threadId) {
+        setThreadId(response.threadId)
+      }
 
-      // Add the assistant message to the state
+      const reply = {
+        role: 'assistant',
+        content: response.messages.data[0].content[0].text.value
+      }
+
       setMessages([...newMessages, reply])
     } catch (error) {
-      // Show error when something goes wrong
       addToast({ title: 'An error occurred', type: 'error' })
     } finally {
       setIsLoadingAnswer(false)
