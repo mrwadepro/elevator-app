@@ -4,12 +4,12 @@ import ReactMarkdown from 'react-markdown'
 const MessagesList = () => {
   const { messages, isLoadingAnswer } = useMessages()
 
-  const cleanMessage = (content) => {
+  const cleanMessage = (content:any) => {
     if (!content) return ''
     return content.replace(/\\n/g, '\n').replace(/\\"/g, '"')
   }
 
-  const renderMessage = (message, isUser) => {
+  const renderMessage = (message:any, isUser:any) => {
     if (!message?.content) {
       return <div className="text-gray-500">No message content available</div>
     }
