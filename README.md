@@ -29,8 +29,15 @@ The application uses the following components:
 5.  Open your browser and navigate to `http://localhost:3000` to access the application.
     
 6.  You can now interact with the chatbot using the input field at the bottom of the screen.
-    
 
+
+## Deploy
+```bash
+docker build -t elevator-app .
+docker tag elevator-app gcr.io/elevator-application/elevator-app
+docker push gcr.io/elevator-application/elevator-app
+gcloud run services update elevator-app --image gcr.io/elevator-application/elevator-app --region us-central1
+```
 ## Customizing the Application
 
 #### Model Selection (Optional)

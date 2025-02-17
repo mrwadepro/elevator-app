@@ -18,8 +18,6 @@ COPY . .
 
 # Build the application
 ENV NEXT_TELEMETRY_DISABLED 1
-# Copy and use build-time env vars
-COPY .env.production .env
 RUN npm run build
 
 # Stage 3: Runner
